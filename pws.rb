@@ -31,7 +31,14 @@ require 'tempfile'
 require 'yaml'
 Thread.abort_on_exception = true
 
-GNUPG = "gpg"
+# In 16.04 and Fedora 28, gpg2 is the executable.  In 18.04, gpg is the executable and gpg2 is not available.
+if FileTest.executable?("/usr/bin/gpg2")
+  GNUPG="gpg2"
+else
+  GNUPG="gpg"
+end
+# TODO: find a better way to select which version of gpg to use
+
 GROUP_PATTERN = "@[a-zA-Z0-9_-]+"
 USER_PATTERN = "[a-zA-Z0-9:_-]+"
 $program_name = File.basename($0, '.*')
